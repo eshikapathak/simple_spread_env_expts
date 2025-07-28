@@ -1,0 +1,2 @@
+pettingzoo[mpe2]
+pygame
