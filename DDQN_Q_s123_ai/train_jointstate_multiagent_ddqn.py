@@ -7,10 +7,11 @@ import random
 import os
 import matplotlib.pyplot as plt
 from mpe2 import simple_spread_v3  
+from torch.utils.tensorboard import SummaryWriter
 
 # Hyperparameters
 GAMMA = 0.99
-LR = 1e-3
+LR = 1e-4
 BATCH_SIZE = 128
 REPLAY_BUFFER_SIZE = 100_000
 TARGET_UPDATE_FREQ = 100
@@ -28,6 +29,8 @@ os.makedirs(log_dir, exist_ok=True)
 reward_log_path = os.path.join(log_dir, "reward_log.npy")
 model_dir = "./joint_state_models"
 os.makedirs(model_dir, exist_ok=True)
+# TensorBoard setup
+writer = SummaryWriter(log_dir=log_dir)
 
 episode_rewards = []
 
@@ -68,7 +71,7 @@ class ReplayBuffer:
     def __len__(self):
         return len(self.buffer)
 
-# ε-greedy action selection
+# epsilon greedy action selection
 def select_action(q_net, joint_obs, epsilon, action_space):
     if random.random() < epsilon:
         return action_space.sample()
@@ -138,6 +141,7 @@ for episode in range(NUM_EPISODES):
             loss = nn.MSELoss()(q_vals, target.detach())
             optimizers[agent].zero_grad()
             loss.backward()
+            writer.add_scalar(f"{agent}/loss", loss.item(), episode * MAX_CYCLES + step)
             optimizers[agent].step()
 
         if step % TARGET_UPDATE_FREQ == 0:
@@ -146,10 +150,13 @@ for episode in range(NUM_EPISODES):
 
     epsilon = max(EPS_END, epsilon * EPS_DECAY)
     avg_reward = np.mean([total_reward[agent] for agent in agents])
+    writer.add_scalar("avg_reward", avg_reward, episode)
     episode_rewards.append(avg_reward)
 
-    if episode % 50 == 0:
+    if episode % 100 == 0:
         print(f"Episode {episode} | Avg reward: {avg_reward:.2f} | epsilon: {epsilon:.3f}")
+
+writer.close()
 
 # Save
 np.save(reward_log_path, episode_rewards)
@@ -167,3 +174,6 @@ plt.savefig(os.path.join(log_dir, "learning_curve.png"))
 plt.close()
 
 env.close()
+
+# after training, to view logs:
+# tensorboard --logdir=joint_state_logs

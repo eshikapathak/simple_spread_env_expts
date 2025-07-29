@@ -4,3 +4,4 @@ mpe2
 matplotlib
 numpy
 torch
+tensorboard
