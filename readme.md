@@ -32,19 +32,33 @@ To just launch the simple spread environment and render agent and landmark behav
 ```bash
 python run_spread.py
 ```
-
-### Train the DDQN agents  - THIS IS JUST SIMPLE DDQN, NOT THE POTENTIAL FUNCTION PROPOSED STUFF
+---
+### Train the joint state DDQN agents Q([s1, s2, s3], ai) - no potential function stuff
 This script trains three agents independently using DDQN:
 ```bash
-python train_multiagent_ddqn.py
+python DDQN_Q_s123_ai/train_jointstate_multiagent_ddqn.py
+```
+After training, the learned Q-networks are saved in joint_state_models/, and learning metrics are saved in joint_state_logs/.
+
+### Test the trained Agents
+Load the Q-networks and evaluate agent behavior over multiple episodes:
+```bash
+python DDQN_Q_s123_ai/test_jointstate_multiagent_ddqn.py
+```
+---
+### Train the DDQN agents Qi(si, ai) - THIS IS JUST SIMPLE DDQN, NOT THE POTENTIAL FUNCTION PROPOSED STUFF
+This script trains three agents independently using DDQN:
+```bash
+python DDQN_Q_si_ai/train_multiagent_ddqn.py
 ```
 After training, the learned Q-networks are saved in models/, and learning metrics are saved in logs/.
 
 ### Test the Trained Agents
 Load the Q-networks and evaluate agent behavior over multiple episodes:
 ```bash
-python test_multiagent_ddqn.py
+python DDQN_Q_si_ai/test_multiagent_ddqn.py
 ```
+---
 
 ### Sanity Check: Environment Setup
 Inspect the sizes of agents and landmarks, initial positions, and distances to ensure correct setup:

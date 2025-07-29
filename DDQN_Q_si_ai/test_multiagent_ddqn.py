@@ -58,7 +58,7 @@ for ep in range(NUM_EVAL_EPISODES):
     for step in range(MAX_CYCLES):
         actions = {}
         for agent in agents:
-            actions[agent] = select_greedy_action(q_nets[agent], obs[agent])
+            actions[agent] = select_greedy_action(q_nets[agent], obs[agent]) #env.action_space(agent).sample() #select_greedy_action(q_nets[agent], obs[agent])
         obs, rewards, terminations, truncations, infos = env.step(actions)
         for agent in agents:
             total_reward[agent] += rewards[agent]
