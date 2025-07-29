@@ -11,7 +11,7 @@ Fyi, brief notes/comments on the sanity check results can be found [here](https:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your_username/simple_spread_env.git
+git clone https://github.com/eshikapathak/simple_spread_env.git
 cd simple_spread_env 
 ```
 
