@@ -1,2 +1,6 @@
 pettingzoo[mpe2]
 pygame
+mpe2
+matplotlib
+numpy
+torch
