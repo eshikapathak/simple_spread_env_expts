@@ -2,8 +2,18 @@
 
 This repository implements and evaluates a multi-agent reinforcement learning setup using **Double DQN (DDQN)** on the `simple_spread` environment from the [Multi-Agent Particle Environment (MPE)](https://github.com/Farama-Foundation/MPE2/tree/main). The goal is to learn cooperative policies where agents cover landmarks efficiently without colliding.
 
-Fyi, brief notes/comments on the sanity check results can be found [here](https://docs.google.com/document/d/1k-At8SW194tNfY5CPorAJ1PyGzPUWlgp3Uky0ySUyQQ/edit?usp=sharing) 
+---
 
+## Live updates
+6pm CT, Jul 30:
+
+DDQN_Q_s123_a123 has the new training file for Qi(joint_state, joint_action). It stores the models in joint_state_joint_action_models/ and logs in joint_state_joint_action_logs/
+
+If you want to start off with a Q model for ppi, you can use the models in joint_state_joint_action_models/
+
+PPI implemented in PPI folder. I haven't run it or trained it yet, it is based on today's discussion. 
+
+(note, NNs have been made a bit bigger in hope for better performance with the new higher dim input.)
 ---
 
 ## Setup Instructions
@@ -71,6 +81,8 @@ Loads the trained Q-networks and prints: Agent positions and velocities, distanc
 ```bash
 python sanity_checks_testing_ddqn.py
 ```
+
+Fyi, brief notes/comments on the sanity check results can be found [here](https://docs.google.com/document/d/1k-At8SW194tNfY5CPorAJ1PyGzPUWlgp3Uky0ySUyQQ/edit?usp=sharing) 
 
 
 
