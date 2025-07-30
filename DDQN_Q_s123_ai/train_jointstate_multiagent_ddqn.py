@@ -17,9 +17,9 @@ REPLAY_BUFFER_SIZE = 100_000
 TARGET_UPDATE_FREQ = 100
 EPS_START = 1.0
 EPS_END = 0.001
-EPS_DECAY = 0.999
+EPS_DECAY = 1 #0.999 -- no decay, so epsilon stays as 1 throughout
 NUM_EPISODES = 5000
-MAX_CYCLES = 25
+MAX_CYCLES = 50
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -39,9 +39,9 @@ class QNetwork(nn.Module):
     def __init__(self, input_dim, action_dim):
         super().__init__()
         self.net = nn.Sequential(
-            nn.Linear(input_dim, 128),
+            nn.Linear(input_dim, 256),
             nn.ReLU(),
-            nn.Linear(128, 128),
+            nn.Linear(256, 128),
             nn.ReLU(),
             nn.Linear(128, action_dim)
         )
@@ -135,7 +135,8 @@ for episode in range(NUM_EPISODES):
             s, a, r, s_, done = buffers[agent].sample(BATCH_SIZE)
             q_vals = q_nets[agent](s).gather(1, a.unsqueeze(1)).squeeze()
             next_actions = torch.argmax(q_nets[agent](s_), dim=1)
-            next_q_vals = target_nets[agent](s_).gather(1, next_actions.unsqueeze(1)).squeeze()
+            next_q_vals = target_nets[agent](s_).mean(dim=1)
+            # next_q_vals = target_nets[agent](s_).gather(1, next_actions.unsqueeze(1)).squeeze()
             target = r + GAMMA * next_q_vals * (1 - done.float())
 
             loss = nn.MSELoss()(q_vals, target.detach())

@@ -25,9 +25,9 @@ class QNetwork(torch.nn.Module):
     def __init__(self, input_dim, action_dim):
         super().__init__()
         self.net = torch.nn.Sequential(
-            torch.nn.Linear(input_dim, 128),
+            torch.nn.Linear(input_dim, 256),
             torch.nn.ReLU(),
-            torch.nn.Linear(128, 128),
+            torch.nn.Linear(256, 128),
             torch.nn.ReLU(),
             torch.nn.Linear(128, action_dim)
         )
